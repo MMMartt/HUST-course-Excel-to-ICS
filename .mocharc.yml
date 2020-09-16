@@ -1,0 +1,9 @@
+require: 'ts-node/register'
+extensions:
+  - 'ts'
+  - 'tsx'
+spec: test/**/*.spec.ts
+watch: false
+watch-files:
+  - src
+  - test/**/*.ts
