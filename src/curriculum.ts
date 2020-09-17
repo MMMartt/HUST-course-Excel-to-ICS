@@ -11,21 +11,23 @@ type CourseInfo = {
 }
 
 type Schedule = {
+  title: string
   location: string
   info: string
-  weekStart: number
-  weekEnd: number
   day: 'Sun' | 'Mon' | 'Tue' | 'Wed' | 'Thu' | 'Fri' | 'Sat'
+  timeArrange: {
+    start: number
+    end: number
+  }
+  weeks: {
+    start: number
+    end: number
+  }
 }
 
-type CourseSchedule = {
-  teacher: string
-  schedules: Array<Schedule>
-}
-
-type CurriculumUnit = {
-  classes: string[]
-  courses: Array<CourseSchedule>
+type ClassCurriculumUnit = {
+  classInfo: ClassInfo
+  curriculums: Array<Schedule>
 }
 
 type GradeInfo = {
@@ -37,8 +39,7 @@ type GradeInfo = {
 export type GradeCurriculum = {
   gradeInfo: GradeInfo
   courseInfo: Array<CourseInfo>
-  classInfo: Array<ClassInfo>
-  curriculums: Array<CurriculumUnit>
+  classCurriculums: Array<ClassCurriculumUnit>
 }
 
 type SheetInfo = {
@@ -59,82 +60,39 @@ export type CourseCurriculumUnit = {
   gradeInfo: GradeInfo
   courseInfo: CourseInfo
   classInfo: ClassInfo
-  schedules: Array<CourseSchedule>
+  schedules: Array<Schedule>
 }
 
-export type Status = {
-  raw: Array<SheetCurriculum>
-  current: {
-    sheetIndex: number
-    gradeIndex: number
-    curriculumsIndex: number
-  }
-  selected: Array<CourseCurriculumUnit>
-  result: {
-    type: 'success' | 'fail'
-    error?: string
-  }
+export const isCourseOf = (
+  schedule: Schedule,
+  courseInfo: CourseInfo
+): boolean => {
+  // TODO: should contain some advanced check technical
+  return schedule.title === courseInfo.name
 }
 
-export type OperationTypes =
-  | {
-      type: 'up'
-    }
-  | {
-      type: 'down'
-      index: number
-    }
-  | {
-      type: 'select'
-    }
-  | {
-      type: 'remove'
-      index: number
-    }
-  | {
-      type: 'edit'
-      // TODO: DO THIS
-    }
+export const querySchedule = (
+  schedules: Schedule[],
+  courseInfo: CourseInfo
+): Array<Schedule> => {
+  return schedules.filter(schedule => {
+    return isCourseOf(schedule, courseInfo)
+  })
+}
 
-export function initCurrentStatus(raw: SheetCurriculum[]): Status {
+export const genCourseCurriculumUnit = (
+  raw: SheetCurriculum[],
+  selectedIndexes: [number, number, number, number]
+): CourseCurriculumUnit => {
+  const sheet = raw[selectedIndexes[0]]
+  const grade = sheet.gradeCurriculums[selectedIndexes[1]]
+  const _class = grade.classCurriculums[selectedIndexes[2]]
+  const course = grade.courseInfo[selectedIndexes[3]]
   return {
-    raw,
-    current: {
-      sheetIndex: -1,
-      gradeIndex: -1,
-      curriculumsIndex: -1,
-    },
-    selected: [],
-    result: {
-      type: 'success',
-    },
-  }
-}
-
-const getAvailableIndex = () => {}
-
-const operationHandler = (raw: Status, action: OperationTypes): Status => {
-  throw new Error('fuck')
-
-  // TODO:
-  switch (action.type) {
-    case 'down':
-      break
-    default:
-      throw new Error('unexpected operation.')
-  }
-}
-
-export const applyAction: typeof operationHandler = (raw, action) => {
-  try {
-    return operationHandler(raw, action)
-  } catch (error) {
-    return {
-      ...raw,
-      result: {
-        type: 'fail',
-        error: error as string,
-      },
-    }
+    sheetInfo: sheet.sheetInfo,
+    gradeInfo: grade.gradeInfo,
+    classInfo: _class.classInfo,
+    courseInfo: course,
+    schedules: querySchedule(_class.curriculums, course),
   }
 }
