@@ -158,7 +158,7 @@ describe('sheet selector', () => {
     })
 
     it('should not be able to select while not settled', () => {
-      let status = applyActionList(
+      const status = applyActionList(
         currentStatus,
         Array.from(new Array(4))
           .map(() => ({ type: 'down', index: 0 } as OperationTypes))

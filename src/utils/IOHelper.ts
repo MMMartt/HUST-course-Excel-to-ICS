@@ -1,7 +1,6 @@
-import { white, blue, grey, bold } from 'chalk'
+import { blue, bold, grey, white } from 'chalk'
 /* eslint-disable no-console */
 import { createInterface, Interface } from 'readline'
-import fs from 'fs'
 
 export const readStdInput = async (
   question: string,
@@ -22,6 +21,12 @@ export const readStdInput = async (
       }
     })
   })
+}
+
+export const transformOptionString = (options: string[]): string => {
+  return options
+    .map((option, i) => bold(white(`[${i}] `)) + blue(option))
+    .join('\n')
 }
 
 type ReadInputToSelectionOptions = {
@@ -45,11 +50,7 @@ export async function readInputToSelect(
   if (selections.length < 2) return selections
   if (_options.describe) console.log(white(_options.describe))
 
-  console.log(
-    selections
-      .map((selection, i) => bold(white(`[${i}] `)) + blue(selection))
-      .join('\n')
-  )
+  console.log(transformOptionString(selections))
 
   const parseAnsToNums = (ans: string): number[] =>
     ans
@@ -68,15 +69,4 @@ export async function readInputToSelect(
     {} as { [k: number]: string }
   )
   return Object.values(selectedOptions)
-}
-
-export const readdir = (dirName: string): Promise<string[]> => {
-  return new Promise((resolve, reject) => {
-    fs.readdir(dirName, (e, files) => {
-      if (e) {
-        reject(e)
-      }
-      resolve(files)
-    })
-  })
 }

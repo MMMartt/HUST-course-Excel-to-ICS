@@ -6,5 +6,13 @@
     "yarn.lock": true,
     "yarn-error.log": true,
   },
-  "mocha.requires": ["ts-node/register"]
+  "mocha.requires": [
+    "ts-node/register"
+  ],
+  "cSpell.words": [
+    "Subcomponent",
+    "prodid",
+    "vcalendar",
+    "vevent"
+  ]
 }
