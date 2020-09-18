@@ -1,9 +1,9 @@
-type ClassInfo = {
+export type ClassInfo = {
   name: string
   studentNum: number
 }
 
-type CourseInfo = {
+export type CourseInfo = {
   name: string
   teacher: string
   credit: number
@@ -14,7 +14,7 @@ type Schedule = {
   title: string
   location: string
   info: string
-  day: 'Sun' | 'Mon' | 'Tue' | 'Wed' | 'Thu' | 'Fri' | 'Sat'
+  day: 0 | 1 | 2 | 3 | 4 | 5 | 6 // 'Sun' | 'Mon' | 'Tue' | 'Wed' | 'Thu' | 'Fri' | 'Sat'
   timeArrange: {
     start: number
     end: number
@@ -25,12 +25,12 @@ type Schedule = {
   }
 }
 
-type ClassCurriculumUnit = {
+export type ClassCurriculumUnit = {
   classInfo: ClassInfo
   curriculums: Array<Schedule>
 }
 
-type GradeInfo = {
+export type GradeInfo = {
   rawTitle: string
   department: string
   grade: string
@@ -42,7 +42,7 @@ export type GradeCurriculum = {
   classCurriculums: Array<ClassCurriculumUnit>
 }
 
-type SheetInfo = {
+export type SheetInfo = {
   rawTitle: string
   collage: string
   startYear: number

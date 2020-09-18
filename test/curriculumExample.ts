@@ -38,7 +38,7 @@ export const curriculumGenerator = (): SheetCurriculum => {
             },
             curriculums: [
               {
-                day: 'Tue',
+                day: 2,
                 info: 'LING LING WORKOUT',
                 location: 'PARADISE',
                 title: 'V101',
@@ -52,7 +52,7 @@ export const curriculumGenerator = (): SheetCurriculum => {
                 },
               },
               {
-                day: 'Mon',
+                day: 1,
                 info: 'LING LING WORKOUT',
                 location: 'PARADISE',
                 title: 'V101',
@@ -66,7 +66,7 @@ export const curriculumGenerator = (): SheetCurriculum => {
                 },
               },
               {
-                day: 'Thu',
+                day: 4,
                 info: 'LING LING WORKOUT',
                 location: 'PARADISE',
                 title: 'V101',
@@ -80,7 +80,7 @@ export const curriculumGenerator = (): SheetCurriculum => {
                 },
               },
               {
-                day: 'Wed',
+                day: 3,
                 info: 'LANG LANG WORKOUT',
                 location: 'HELL',
                 title: 'P101',
@@ -94,7 +94,7 @@ export const curriculumGenerator = (): SheetCurriculum => {
                 },
               },
               {
-                day: 'Fri',
+                day: 5,
                 info: 'LANG LANG F WORKOUT',
                 location: 'HELL B401',
                 title: 'P101',
@@ -108,7 +108,7 @@ export const curriculumGenerator = (): SheetCurriculum => {
                 },
               },
               {
-                day: 'Mon',
+                day: 1,
                 info: 'LANG LANG WORKOUT',
                 location: 'HELL A302',
                 title: 'P101',
@@ -130,7 +130,7 @@ export const curriculumGenerator = (): SheetCurriculum => {
             },
             curriculums: [
               {
-                day: 'Tue',
+                day: 2,
                 info: 'LING LING WORKOUT',
                 location: 'PARADISE',
                 title: 'V101',
@@ -144,7 +144,7 @@ export const curriculumGenerator = (): SheetCurriculum => {
                 },
               },
               {
-                day: 'Mon',
+                day: 1,
                 info: 'LING LING WORKOUT',
                 location: 'PARADISE',
                 title: 'V101',
@@ -158,7 +158,7 @@ export const curriculumGenerator = (): SheetCurriculum => {
                 },
               },
               {
-                day: 'Thu',
+                day: 4,
                 info: 'LING LING WORKOUT',
                 location: 'PARADISE',
                 title: 'V101',
@@ -172,7 +172,7 @@ export const curriculumGenerator = (): SheetCurriculum => {
                 },
               },
               {
-                day: 'Wed',
+                day: 3,
                 info: 'LANG LANG WORKOUT',
                 location: 'HELL',
                 title: 'P101',
@@ -186,7 +186,7 @@ export const curriculumGenerator = (): SheetCurriculum => {
                 },
               },
               {
-                day: 'Fri',
+                day: 5,
                 info: 'LANG LANG F WORKOUT',
                 location: 'HELL B401',
                 title: 'P101',
@@ -200,7 +200,7 @@ export const curriculumGenerator = (): SheetCurriculum => {
                 },
               },
               {
-                day: 'Mon',
+                day: 1,
                 info: 'LANG LANG WORKOUT',
                 location: 'HELL A302',
                 title: 'P101',

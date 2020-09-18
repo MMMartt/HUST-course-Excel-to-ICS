@@ -1,17 +1,17 @@
 import { blue, bold, grey, white } from 'chalk'
-/* eslint-disable no-console */
 import { createInterface, Interface } from 'readline'
 
 export const readStdInput = async (
   question: string,
   validator: (ans: string) => boolean = () => true,
-  rl: Interface | null = null
+  rl: Interface | null = null,
+  defaultAns = ''
 ): Promise<string> => {
   const _rl: Interface =
     rl || createInterface({ input: process.stdin, output: process.stdout })
 
   return new Promise(res => {
-    return _rl.question(question, async ans => {
+    _rl.question(question, async ans => {
       if (validator(ans)) res(ans)
       else res(await readStdInput(question, validator, _rl))
 
@@ -20,6 +20,8 @@ export const readStdInput = async (
         _rl.close()
       }
     })
+    _rl.write(defaultAns)
+    return
   })
 }
 
@@ -48,8 +50,10 @@ export async function readInputToSelect(
   }
 
   if (selections.length < 2) return selections
+  // eslint-disable-next-line no-console
   if (_options.describe) console.log(white(_options.describe))
 
+  // eslint-disable-next-line no-console
   console.log(transformOptionString(selections))
 
   const parseAnsToNums = (ans: string): number[] =>

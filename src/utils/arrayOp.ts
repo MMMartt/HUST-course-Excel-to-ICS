@@ -26,3 +26,7 @@ export const replaceLast = <T>(
 export const isSameSimpleArray = <T>(a: Array<T>, b: Array<T>): boolean => {
   return a.findIndex((v, i) => b[i] !== v) < 0
 }
+
+export const extractObjectValueToList: typeof Object.values = (o: never) => {
+  return Object.values(o)
+}

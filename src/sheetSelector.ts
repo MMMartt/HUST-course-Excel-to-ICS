@@ -186,7 +186,7 @@ export const getNamedSelection = (
       () => raw[r[0]].gradeCurriculums[vi].gradeInfo.rawTitle,
       () =>
         raw[r[0]].gradeCurriculums[r[1]].classCurriculums[vi].classInfo.name,
-      () => raw[r[0]].gradeCurriculums[r[1]].courseInfo[vi],
+      () => raw[r[0]].gradeCurriculums[r[1]].courseInfo[vi].name,
     ][i]()
     return white(text)
   }) as never

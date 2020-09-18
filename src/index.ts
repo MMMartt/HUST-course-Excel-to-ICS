@@ -50,8 +50,10 @@ finish
       status.selected.map(a => getNamedSelection(status.raw, a).join(' - '))
     )}
 > `
-  return `
-current position: ${getNamedSelection(status.raw, status.current).join(' - ')}
+  return `current position: ${getNamedSelection(
+    status.raw,
+    status.current
+  ).join(' - ')}
 selected courses: ${status.selected.length}
 available next level:
 ${transformOptionString(getAvailableNextLevel(status))}
@@ -75,7 +77,9 @@ const readAction = async (
   const getAns = async (): Promise<void> => {
     if (operationTypes.includes(cmd[0])) return
     const question = white(generateQuestionString(cmd, status))
-    const answer = await readStdInput(question, () => true, rl)
+    let defaultProm = 'select'
+    if (status.current.includes(-1)) defaultProm = 'down '
+    const answer = await readStdInput(question, () => true, rl, defaultProm)
     cmd = parseCmd(answer)
     return await getAns()
   }
@@ -88,7 +92,7 @@ const readAction = async (
     type: cmd[0],
   }
   if (['down', 'remove'].includes(cmd[0])) {
-    op['index'] = cmd[2]
+    op['index'] = parseInt(cmd[1])
   }
   return op
 }
@@ -111,7 +115,9 @@ async function start(rl: readline.Interface) {
   // eslint-disable-next-line no-console
   console.log(filesToUse)
 
-  const curriculums = parseExcelToCurriculum(filesToUse)
+  const curriculums = parseExcelToCurriculum(
+    filesToUse.map(a => path.join(inputDir, a))
+  )
 
   let status = initCurrentStatus(curriculums)
   const getAns = async (): Promise<void> => {
@@ -134,11 +140,10 @@ async function start(rl: readline.Interface) {
     (await readStdInput('export ical to(build.ics):', () => true, rl)).trim() ||
     'build.ics'
 
-  await promisedFs.writeFile(
-    path.join(outputDir, outputFilename),
-    icalStr,
-    'utf-8'
-  )
+  await promisedFs.writeFile(path.join(outputDir, outputFilename), icalStr, {
+    flag: 'w',
+    encoding: 'utf-8',
+  })
 
   return 'finished'
 }
