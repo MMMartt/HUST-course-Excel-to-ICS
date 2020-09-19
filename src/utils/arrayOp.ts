@@ -30,3 +30,14 @@ export const isSameSimpleArray = <T>(a: Array<T>, b: Array<T>): boolean => {
 export const extractObjectValueToList: typeof Object.values = (o: never) => {
   return Object.values(o)
 }
+
+export const mapConcat = <T>(a: Array<T>, b: Array<T>): Array<Array<T>> => {
+  return b.map(v => [...a, v])
+}
+
+export const findFirstSameArray = <T>(
+  a: Array<T>[],
+  b: Array<T>[]
+): Array<T> | undefined => {
+  return a.find(av => b.findIndex(bv => isSameSimpleArray(av, bv)) > -1)
+}

@@ -10,7 +10,7 @@ export type CourseInfo = {
   classHour: string
 }
 
-type Schedule = {
+export type Schedule = {
   title: string
   location: string
   info: string
@@ -19,10 +19,7 @@ type Schedule = {
     start: number
     end: number
   }
-  weeks: {
-    start: number
-    end: number
-  }
+  weeks: Array<[number, number]>
 }
 
 export type ClassCurriculumUnit = {
@@ -67,8 +64,8 @@ export const isCourseOf = (
   schedule: Schedule,
   courseInfo: CourseInfo
 ): boolean => {
-  // TODO: should contain some advanced check technical
-  return schedule.title === courseInfo.name
+  // TODO:弄成可以配置的
+  return schedule.title.includes(courseInfo.name)
 }
 
 export const querySchedule = (

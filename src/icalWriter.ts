@@ -21,31 +21,38 @@ const TIME_ARRANGE = [
  */
 const generateLessonTimePeriodByDay = (
   date: Date,
-  lessonStartEnd: [number, number]
+  [start, end]: [number, number]
 ): [number, number, number, number] => {
   return [
-    TIME_ARRANGE[lessonStartEnd[0]][0],
-    TIME_ARRANGE[lessonStartEnd[0]][1],
-    TIME_ARRANGE[lessonStartEnd[1]][0],
-    TIME_ARRANGE[lessonStartEnd[1]][1],
+    TIME_ARRANGE[start - 1][0],
+    TIME_ARRANGE[start - 1][1],
+    TIME_ARRANGE[end - 1][2],
+    TIME_ARRANGE[end - 1][3],
   ]
+}
+
+/**
+ * should return offsets
+ */
+const genWeekListFromWeekPairs = (
+  weekPair: Array<[number, number]>
+): number[] => {
+  return weekPair.flatMap(([start, end]): number[] => {
+    const result = Array.from(new Array(end - start + 1)).map(
+      (_, i) => i + start - 1
+    )
+    return result
+  })
 }
 
 const addScheduleToComp = (s: CourseCurriculumUnit, comp: jsIcal.Component) => {
   s.schedules.forEach(schedule => {
     const desc = `${s.gradeInfo.department} ${s.classInfo.name} ${s.classInfo.studentNum}人; ${s.courseInfo.credit}学分 ${s.courseInfo.classHour}学时 ${s.courseInfo.teacher}; ${schedule.info}`
     const startDay = s.sheetInfo.firstWeekStartAt
-    Array.from(
-      new Array(schedule.weeks.end - schedule.weeks.start + 1)
-    ).forEach((_, i) => {
+    genWeekListFromWeekPairs(schedule.weeks).forEach(i => {
       const vevent = new jsIcal.Component('vevent')
       const date = new Date(startDay.getTime())
-      date.setDate(
-        date.getDate() +
-          7 * (schedule.weeks.start - 1 + i) +
-          schedule.day -
-          date.getDay()
-      )
+      date.setDate(date.getDate() + 7 * i + schedule.day - date.getDay())
       const event = new jsIcal.Event(vevent)
       const timePeriod = generateLessonTimePeriodByDay(date, [
         schedule.timeArrange.start,
@@ -76,4 +83,8 @@ export const parseSchedulesToIcal = (
     addScheduleToComp(s, comp)
   })
   return comp.toString()
+}
+
+export const _MOCHA_TEST_EXPORTS_ = {
+  genWeekListFromWeekPairs,
 }

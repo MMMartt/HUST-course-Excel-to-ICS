@@ -1,14 +1,20 @@
 import { grey, white } from 'chalk'
 import { SheetCurriculum } from './curriculum'
-import { isSameSimpleArray, replaceFirst, replaceLast } from './utils/arrayOp'
+import {
+  findFirstSameArray,
+  mapConcat,
+  replaceFirst,
+  replaceLast,
+} from './utils/arrayOp'
 
 export type Status = {
   raw: Array<SheetCurriculum>
-  current: [number, number, number, number]
+  current: [number, number, number, number[]]
   selected: Array<[number, number, number, number]>
   result: {
-    type: 'success' | 'fail' | 'finished'
-    error?: string
+    type: 'success' | 'fail' | 'finished' | 'init'
+    error?: Error
+    cmd?: OperationTypes
   }
 }
 
@@ -18,14 +24,14 @@ export type OperationTypes =
     }
   | {
       type: 'down'
-      index: number
+      indexes: number[]
     }
   | {
       type: 'select'
     }
   | {
       type: 'remove'
-      index: number
+      indexes: number[]
     }
   | {
       type: 'edit'
@@ -38,10 +44,10 @@ export type OperationTypes =
 export function initCurrentStatus(raw: SheetCurriculum[]): Status {
   return {
     raw,
-    current: [-1, -1, -1, -1],
+    current: [-1, -1, -1, []],
     selected: [],
     result: {
-      type: 'success',
+      type: 'init',
     },
   }
 }
@@ -56,85 +62,102 @@ export const getAvailableNextLevel = (status: Status): string[] => {
     return status.raw[status.current[0]].gradeCurriculums[
       status.current[1]
     ].classCurriculums.map(a => a.classInfo.name)
-  if (status.current[3] === -1)
-    return status.raw[status.current[0]].gradeCurriculums[
-      status.current[1]
-    ].courseInfo.map(a => a.name)
-  return []
+  // if (status.current[3] === -1)
+  return status.raw[status.current[0]].gradeCurriculums[
+    status.current[1]
+  ].courseInfo.map(a => a.name)
+  // return []
 }
 
 const getAvailableNextLevelIndex = (status: Status): number[] => {
   return getAvailableNextLevel(status).map((_, i) => i)
 }
 
+export const mapCurrent = (a: Status['current']): Status['selected'] => {
+  return mapConcat(a.slice(0, -1), a[3].length === 0 ? [-1] : a[3]) as never
+}
+
 /**
  * 因为外层会捉错误，故当只需变更为错误时，就直接抛错了
  */
 const operationHandler = (status: Status, action: OperationTypes): Status => {
-  if (status.result.type === 'finished') throw 'finished already'
+  if (status.result.type === 'finished') throw new TypeError('finished already')
   switch (action.type) {
     case 'down': {
-      const index = action.index
-      const feasibility = getAvailableNextLevelIndex(status).includes(index)
-      if (!feasibility) {
-        throw 'index out of range'
-      }
+      const indexes = action.indexes
+      if (indexes.length > 1 && status.current[2] === -1)
+        throw new RangeError('最后一层以外一次只能选择一个选项')
+      const available = getAvailableNextLevelIndex(status)
+      // console.log(available, indexes)
+      const repeatedIndex = available.findIndex(i => indexes.includes(i))
+      if (repeatedIndex === -1)
+        throw new Error(indexes[repeatedIndex] + 'index out of range')
       return {
         ...status,
         result: { type: 'success' },
-        current: replaceFirst(
-          status.current,
-          a => a === -1,
-          index
-        ) as typeof status.current,
+        current:
+          status.current[2] === -1
+            ? (replaceFirst(status.current, a => a === -1, indexes[0]) as never)
+            : [
+                ...(status.current.slice(0, -1) as [number, number, number]),
+                indexes,
+              ],
       }
     }
+
     case 'up': {
-      if (status.current[0] === -1) throw 'it is already top level now'
+      if (status.current[0] === -1)
+        throw new RangeError('it is already top level now')
       return {
         ...status,
         result: { type: 'success' },
-        current: replaceLast(
-          status.current,
-          a => a !== -1,
-          -1
-        ) as typeof status.current,
+        current:
+          status.current[3].length === 0
+            ? (replaceLast(
+                status.current.slice(0, 3),
+                a => a !== -1,
+                -1
+              ).concat([[]]) as never)
+            : ([...status.current.slice(0, -1), []] as never),
       }
     }
+
     case 'select': {
       // TODO: support multi lessons
-      if (status.current.includes(-1)) throw 'be not able to be selected'
-      const toBeSelected = status.current
-      if (status.selected.find(a => isSameSimpleArray(a, toBeSelected)))
-        throw 'this item has been selected'
+      const emptyError = new Error('be not able to be selected')
+      if (status.current.includes(-1)) throw emptyError
+      const toBeSelected = mapCurrent(status.current)
+      const existedArray = findFirstSameArray(status.selected, toBeSelected)
+      if (existedArray) throw new Error('this item has been selected')
+      if (toBeSelected.length === 0) throw emptyError
       return {
         ...status,
         result: { type: 'success' },
-        current: [-1, -1, -1, -1],
+        current: [-1, -1, -1, []],
         // 应当不存在引用问题
-        selected: status.selected.concat([toBeSelected]),
+        selected: status.selected.concat(toBeSelected),
       }
     }
+
     case 'remove': {
-      const index = action.index
-      if (status.selected.length <= index) {
-        throw 'index out of range'
-      }
+      const indexes = action.indexes
+      if (indexes.findIndex(i => i >= status.selected.length) > -1)
+        throw new Error('max index out of range')
+
       return {
         ...status,
         result: { type: 'success' },
-        selected: [
-          ...status.selected.slice(0, index),
-          ...status.selected.slice(index + 1),
-        ],
+        selected: status.selected.filter((_, i) => !indexes.includes(i)),
       }
     }
+
     case 'finish': {
       return {
         ...status,
         result: { type: 'finished' },
       }
     }
+
     default:
       throw new Error('unexpected operation.')
   }
@@ -148,7 +171,8 @@ export const applyAction: typeof operationHandler = (status, action) => {
       ...status,
       result: {
         type: 'fail',
-        error: action.type + ': ' + (error as string),
+        cmd: action,
+        error,
       },
     }
   }

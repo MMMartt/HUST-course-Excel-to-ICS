@@ -42,10 +42,7 @@ export const curriculumGenerator = (): SheetCurriculum => {
                 info: 'LING LING WORKOUT',
                 location: 'PARADISE',
                 title: 'V101',
-                weeks: {
-                  start: 3,
-                  end: 10,
-                },
+                weeks: [[3, 10]],
                 timeArrange: {
                   start: 3,
                   end: 4,
@@ -56,10 +53,7 @@ export const curriculumGenerator = (): SheetCurriculum => {
                 info: 'LING LING WORKOUT',
                 location: 'PARADISE',
                 title: 'V101',
-                weeks: {
-                  start: 1,
-                  end: 12,
-                },
+                weeks: [[1, 12]],
                 timeArrange: {
                   start: 1,
                   end: 2,
@@ -70,10 +64,7 @@ export const curriculumGenerator = (): SheetCurriculum => {
                 info: 'LING LING WORKOUT',
                 location: 'PARADISE',
                 title: 'V101',
-                weeks: {
-                  start: 1,
-                  end: 13,
-                },
+                weeks: [[1, 13]],
                 timeArrange: {
                   start: 1,
                   end: 4,
@@ -84,10 +75,7 @@ export const curriculumGenerator = (): SheetCurriculum => {
                 info: 'LANG LANG WORKOUT',
                 location: 'HELL',
                 title: 'P101',
-                weeks: {
-                  start: 1,
-                  end: 13,
-                },
+                weeks: [[1, 13]],
                 timeArrange: {
                   start: 1,
                   end: 4,
@@ -98,10 +86,7 @@ export const curriculumGenerator = (): SheetCurriculum => {
                 info: 'LANG LANG F WORKOUT',
                 location: 'HELL B401',
                 title: 'P101',
-                weeks: {
-                  start: 3,
-                  end: 10,
-                },
+                weeks: [[3, 10]],
                 timeArrange: {
                   start: 1,
                   end: 8,
@@ -112,10 +97,7 @@ export const curriculumGenerator = (): SheetCurriculum => {
                 info: 'LANG LANG WORKOUT',
                 location: 'HELL A302',
                 title: 'P101',
-                weeks: {
-                  start: 1,
-                  end: 13,
-                },
+                weeks: [[1, 13]],
                 timeArrange: {
                   start: 5,
                   end: 8,
@@ -134,10 +116,7 @@ export const curriculumGenerator = (): SheetCurriculum => {
                 info: 'LING LING WORKOUT',
                 location: 'PARADISE',
                 title: 'V101',
-                weeks: {
-                  start: 3,
-                  end: 10,
-                },
+                weeks: [[3, 10]],
                 timeArrange: {
                   start: 1,
                   end: 2,
@@ -148,10 +127,7 @@ export const curriculumGenerator = (): SheetCurriculum => {
                 info: 'LING LING WORKOUT',
                 location: 'PARADISE',
                 title: 'V101',
-                weeks: {
-                  start: 1,
-                  end: 12,
-                },
+                weeks: [[1, 12]],
                 timeArrange: {
                   start: 1,
                   end: 2,
@@ -162,10 +138,7 @@ export const curriculumGenerator = (): SheetCurriculum => {
                 info: 'LING LING WORKOUT',
                 location: 'PARADISE',
                 title: 'V101',
-                weeks: {
-                  start: 1,
-                  end: 13,
-                },
+                weeks: [[1, 13]],
                 timeArrange: {
                   start: 1,
                   end: 4,
@@ -176,10 +149,7 @@ export const curriculumGenerator = (): SheetCurriculum => {
                 info: 'LANG LANG WORKOUT',
                 location: 'HELL',
                 title: 'P101',
-                weeks: {
-                  start: 1,
-                  end: 13,
-                },
+                weeks: [[1, 13]],
                 timeArrange: {
                   start: 1,
                   end: 4,
@@ -190,10 +160,7 @@ export const curriculumGenerator = (): SheetCurriculum => {
                 info: 'LANG LANG F WORKOUT',
                 location: 'HELL B401',
                 title: 'P101',
-                weeks: {
-                  start: 3,
-                  end: 10,
-                },
+                weeks: [[3, 10]],
                 timeArrange: {
                   start: 1,
                   end: 8,
@@ -204,10 +171,7 @@ export const curriculumGenerator = (): SheetCurriculum => {
                 info: 'LANG LANG WORKOUT',
                 location: 'HELL A302',
                 title: 'P101',
-                weeks: {
-                  start: 1,
-                  end: 13,
-                },
+                weeks: [[1, 13]],
                 timeArrange: {
                   start: 5,
                   end: 8,
